@@ -10,6 +10,8 @@ while true;
 do
 	IFS=$'\n' read -rd '' -a processArray <<< "$(UNIX95= ps -e -o pid,command | grep $1 | grep -v 'grep\|pid-cpu-usage-mon')"
 	declare tick_definition="$(getconf CLK_TCK)"
+	index=0
+	lastIndex=$((${#processArray[@]} - 1))
 	for processLine in "${processArray[@]}";
 	do
 		IFS=' ' read -a processArrLine <<< ${processLine[@]}
@@ -22,14 +24,21 @@ do
 			then
 				mathStr="((($newTime-${oldCpuTime[$pid]})/$pollInterval)/$tick_definition)*100"
 				usage=`echo $mathStr|bc`
-				outputStr="$outputStr$usage $pid\n"
+				outputStr="$outputStr$usage $pid"
+				if [ $index -lt $lastIndex ]
+				then
+					index=$(($index+1))
+					outputStr="$outputStr\n"
+				fi
 			fi
 			oldCpuTime[$pid]=$newTime
 		done < "/proc/$pid/stat"
 	done
 	if [ ! -z "$outputStr" ]
 	then
+		outputStr=${outputStr//$'\n'/}
 		echo -e $outputStr
+		outputStr=""
 	fi
 	sleep $pollInterval
 done
