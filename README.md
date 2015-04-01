@@ -31,6 +31,7 @@ More complex grep search terms are also acceptable, so long as those terms would
 
 Usage example for node.js cluster monitoring:
 
+    var child_process = require('child_process');
     monitorProcess = child_process.exec("bash pcum.sh 'app.js' 5", function (error, stdout, stderr) {
     });
     monitorProcess.stdout.on('data', function (data) {
