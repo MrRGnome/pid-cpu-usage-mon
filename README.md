@@ -2,6 +2,7 @@
 A program/local cluster CPU monitor in bash. You provide the monitoring interval in seconds and any part of your executed programs command or pid, pcum outputs the cpu usage in that interval as a percent and the pid.
 
 The basic calling syntax is:
+
     bash $pcumDirectory/pcum.sh '$grep-search-terms' $monitoring-interval-seconds
 
 Usage example for command line interface monitoring an app.js cluster every 5 seconds:
