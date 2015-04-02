@@ -8,7 +8,7 @@ pollInterval=$2
 sleep 1
 while true;
 do
-	IFS=$'\n' read -rd '' -a processArray <<< "$(UNIX95= ps -e -o pid,command | grep $1 | grep -v 'grep\|pid-cpu-usage-mon')"
+	IFS=$'\n' read -rd '' -a processArray <<< "$(UNIX95= ps -e -o pid,command | grep $1 | grep -v 'grep\|pcum')"
 	declare tick_definition="$(getconf CLK_TCK)"
 	index=0
 	lastIndex=$((${#processArray[@]} - 1))
