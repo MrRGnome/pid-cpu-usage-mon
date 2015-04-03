@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#   Tested only on Red Hat Enterprise
+#   Requires getconf and bc
 #
 
 
@@ -9,7 +9,11 @@ sleep 1
 while true;
 do
 	IFS=$'\n' read -rd '' -a processArray <<< "$(UNIX95= ps -e -o pid,command | grep $1 | grep -v 'grep\|pcum')"
-	declare tick_definition="$(getconf CLK_TCK)"
+	tick_definition="$(getconf _SC_CLK_TCK)"
+	if [ -z $tick_definition]
+	then
+		tick_definition="$(getconf CLK_TCK)"
+	fi
 	index=0
 	lastIndex=$((${#processArray[@]} - 1))
 	for processLine in "${processArray[@]}";
