@@ -3,17 +3,26 @@
 #   Requires getconf and bc
 #
 
+if [ -z $1 ] || [ -z $2 ];
+then
+	printf "Please include 2 arguments, a search string and a monitoring interval in seconds"
+	printf "Example: bash pcum.sh MyApp.py 5"
+	exit
+fi
+
+declare tick_definition="$(getconf _SC_CLK_TCK)"
+echo $tick_definition
+if [[ -z $tick_definition ]];
+then
+	echo "Getting CLK_TCK"
+	tick_definition="$(getconf CLK_TCK)"
+fi
 
 pollInterval=$2
 sleep 1
 while true;
 do
 	IFS=$'\n' read -rd '' -a processArray <<< "$(UNIX95= ps -e -o pid,command | grep $1 | grep -v 'grep\|pcum')"
-	tick_definition="$(getconf _SC_CLK_TCK)"
-	if [ -z $tick_definition]
-	then
-		tick_definition="$(getconf CLK_TCK)"
-	fi
 	index=0
 	lastIndex=$((${#processArray[@]} - 1))
 	for processLine in "${processArray[@]}";
