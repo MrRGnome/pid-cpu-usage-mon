@@ -11,10 +11,8 @@ then
 fi
 
 declare tick_definition="$(getconf _SC_CLK_TCK)"
-echo $tick_definition
 if [[ -z $tick_definition ]];
 then
-	echo "Getting CLK_TCK"
 	tick_definition="$(getconf CLK_TCK)"
 fi
 
